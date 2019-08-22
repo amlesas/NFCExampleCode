@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">NFCExampleCode</string>
+    <string name="action_settings">Settings</string>
+    <string name="nfc_write_ndef">Write NFC NDEF Tag</string>
+    <string name="nfc_read_tag">Read NFC Tag</string>
+    <string name="nfc_push_ndef">Push NDEF messages</string>
+    <string name="nfc_card_reader">NFC card reader</string>
+    <string name="nfc_internal_se_reader">NFC internal SE reader</string>
+    <string name="hce_service">HCE service</string>
+    <string name="my_service_description">My HCE service description</string>
+    <string name="my_group_description">My HCE grouo description</string>
+</resources>
