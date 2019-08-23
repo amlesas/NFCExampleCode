@@ -81,7 +81,7 @@
         </activity>
 
         <service
-            android:name=".MyAPDUService"
+            android:name=".MyHostAPDUService"
             android:label="@string/hce_service"
             android:permission="android.permission.BIND_NFC_SERVICE"
             android:theme="@style/AppTheme.NoActionBar">

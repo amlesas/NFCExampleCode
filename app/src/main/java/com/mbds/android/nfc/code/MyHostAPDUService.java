@@ -3,7 +3,8 @@ package com.mbds.android.nfc.code;
 import android.nfc.cardemulation.HostApduService;
 import android.os.Bundle;
 
-public class MyAPDUService extends HostApduService {
+public class MyHostAPDUService extends HostApduService {
+
     @Override
     public byte[] processCommandApdu(byte[] bytes, Bundle bundle) {
         //Process APDU command...
