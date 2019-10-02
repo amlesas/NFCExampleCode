@@ -10,8 +10,8 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 
 import java.io.UnsupportedEncodingException;
 
@@ -20,10 +20,11 @@ public class NFCReaderActivity extends Activity {
     //Declare NfcAdapter and PendingIntent
     private NfcAdapter nfcAdapter;
     private PendingIntent pendingIntent;
+    public static String TAG = "TAG";
 
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //Get default NfcAdapter and PendingIntent instances
@@ -31,6 +32,8 @@ public class NFCReaderActivity extends Activity {
         // check NFC feature:
         if (nfcAdapter == null) {
             // process error device not NFC-capable…
+            Toast.makeText(this, "NFC N'EST PAS ACTIVE", Toast.LENGTH_LONG).show();
+            finish();
 
         }
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,getClass()).
@@ -50,6 +53,9 @@ public class NFCReaderActivity extends Activity {
                 // process error NFC not activated…
             }
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
+        } else {
+            Toast.makeText(this, "NFC N'EST PAS ACTIVE", Toast.LENGTH_LONG).show();
+            finish();
         }
 
     }
@@ -65,9 +71,10 @@ public class NFCReaderActivity extends Activity {
 
     }
 
-    public void OnNewIntent (Intent intent) {
+    @Override
+    public void onNewIntent (Intent intent) {
 
-        //Get the Tag object:
+           //Get the Tag object:
         //===================
         // retrieve the action from the received intent
         String action = intent.getAction();
@@ -76,6 +83,8 @@ public class NFCReaderActivity extends Activity {
                 || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
                 || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
 
+            String message = "AUCUNE INFORMATION TROUVEE SUR LE TAG !!!";
+
             // get the tag object from the received intent
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
@@ -83,6 +92,9 @@ public class NFCReaderActivity extends Activity {
             //===============================
             // get the UTD from the tag
             byte[] uid = tag.getId();
+
+            message = "Tag détecté UID : "+uid.toString();
+
             // get the technology list from the tag
             String[] technologies = tag.getTechList();
             // bit reserved to an optional file content descriptor
@@ -91,14 +103,25 @@ public class NFCReaderActivity extends Activity {
             Ndef ndef = Ndef.get(tag);
             // is the tag writable?
             boolean isWritable = ndef.isWritable();
+
+            if (isWritable)
+                message = message+" réinscriptible";
+            else
+                message = message+" non inscriptible";
+
             // can the tag be locked in writing?
             boolean canMakeReadOnly = ndef.canMakeReadOnly();
+
+            if (canMakeReadOnly)
+                message = message+", verrouillable en écriture";
+            else
+                message = message+", non verrouillable en écriture";
 
             //: get NDEF records:
             //===================
             Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
             // check if the tag contains an NDEF message
-            if (rawMsgs != null || rawMsgs.length != 0) {
+            if (rawMsgs != null && rawMsgs.length != 0) {
                 // instantiate a NDEF message array to get NDEF records
                 NdefMessage[] ndefMessage = new NdefMessage[rawMsgs.length];
                 // loop to get the NDEF records
@@ -115,11 +138,16 @@ public class NFCReaderActivity extends Activity {
                         try {
                             String recordTxt = new String(payload, languageSize + 1,
                                     payload.length - languageSize - 1, encoding);
+
+                            message = message + ", NDEF MESSAGE : "+recordTxt;
+
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
 
-                        //check NDEF record TNF:
+
+
+ /*                       //check NDEF record TNF:
                         //======================
                         switch(ndefRecord.getTnf()) {
                             case NdefRecord.TNF_ABSOLUTE_URI:
@@ -139,10 +167,14 @@ public class NFCReaderActivity extends Activity {
                             default:
                                 // manage NDEF record as text…
                         }
-
+*/
                     }
                 }
             }
+            Intent mainActivityIntent = new Intent(this, MainActivity.class);
+            intent.putExtra(TAG, message);
+            startActivity(mainActivityIntent);
+            finish();
         }
     }
 }

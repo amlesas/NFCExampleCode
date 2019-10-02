@@ -58,7 +58,9 @@ public class NFCCardReaderActivity extends Activity {
 
     }
 
-    public void OnNewIntent (Intent intent) {
+
+    @Override
+    public void onNewIntent (Intent intent) {
 
         //Get the Tag object:
         //===================
