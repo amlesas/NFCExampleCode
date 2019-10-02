@@ -23,21 +23,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final Intent intent = getIntent();
-        String message = intent.getStringExtra(NFCReaderActivity.TAG);
+        Bundle bundle = getIntent().getExtras();
+        String message = null;
+        if (bundle != null) {
+            message = bundle.getString(NFCReaderActivity.TAG);
+        }
         if (message!=null) {
             txtView1 = (TextView) findViewById(R.id.txtView1);
             txtView1.setText(message);
         }
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
     }
 
     @Override

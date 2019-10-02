@@ -172,7 +172,9 @@ public class NFCReaderActivity extends Activity {
                 }
             }
             Intent mainActivityIntent = new Intent(this, MainActivity.class);
-            intent.putExtra(TAG, message);
+            Bundle bundle = new Bundle();
+            bundle.putString(TAG, message);
+            mainActivityIntent.putExtras(bundle);
             startActivity(mainActivityIntent);
             finish();
         }
