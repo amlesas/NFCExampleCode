@@ -30,6 +30,14 @@
             </intent-filter>
         </activity>
 
+<!--        IMPORTANT !!!!-->
+
+<!--        !!! FR: Pour que l'activité soit la seule à s'activer, il faudrait mettre !!!!-->
+<!--        !!!! un filtre sur un contenu spécifique comme une URL ou un package application !!!!-->
+
+<!--        #### EN : For the activity to be the only one to activate, it would be necessary to put ###-->
+<!--        ### a filter on a specific content like a URL or an application package ###-->
+
         <activity
             android:name=".NFCReaderActivity"
             android:label="@string/nfc_read_tag"
